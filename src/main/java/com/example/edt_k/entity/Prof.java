@@ -28,5 +28,5 @@ public class Prof {
     @JoinColumn(name = "examen_id", referencedColumnName = "id_Examen")
     private Examen examen;
     @OneToMany(mappedBy = "prof", cascade = CascadeType.ALL)
-    private List<Module> modules ;
+    private List<Module> courses;
 }

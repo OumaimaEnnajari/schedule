@@ -20,6 +20,8 @@ public class Salle {
 
     @Column(name = "prise", nullable = false)
     private boolean prise;
+    @Column(name = "name", nullable = false)
+    private String name;
 
     // In several rooms, we will find only one exam at a given time
     @ManyToOne(optional = false)

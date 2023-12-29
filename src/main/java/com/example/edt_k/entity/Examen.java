@@ -31,5 +31,9 @@ public class Examen {
 
     @OneToOne // One exam for each module
     @JoinColumn(name = "module_id")
-    private Module module;
+    private Module course;
+
+    @ManyToOne
+    @JoinColumn(name = "gene_id", nullable = false)
+    private Gene gene;
 }
