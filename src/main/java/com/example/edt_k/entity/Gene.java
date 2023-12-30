@@ -23,7 +23,7 @@ public class Gene {
     private Long id;
     //un edt corresponf a un gene
     @OneToOne
-    @JoinColumn(name = "filiere_id",referencedColumnName = "id_filiere",nullable = false)
+    @JoinColumn(name = "filiere_id",referencedColumnName = "id_filiere",nullable = false,unique = true)
     private Filiere filiere;
 
     //one timetable contains many exams
