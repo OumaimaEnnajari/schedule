@@ -30,7 +30,7 @@ public class Examen {
     private Exam_time examTime;
 
     @OneToOne // One exam for each module
-    @JoinColumn(name = "module_id")
+    @JoinColumn(name = "module_id",nullable = false)
     private Module course;
 
     @ManyToOne

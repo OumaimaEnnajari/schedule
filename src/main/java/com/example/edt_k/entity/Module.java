@@ -26,9 +26,10 @@ public class Module {
     @JoinColumn(name = "filiere_id", referencedColumnName = "id_filiere")
     private Filiere filiere;
 
-    // One module has one associated exam
-    @OneToOne(mappedBy = "module")
+    @OneToOne(mappedBy = "course")
     private Examen examen;
+
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "prof_id", referencedColumnName = "id_Prof", unique = true)
     private Prof prof;
