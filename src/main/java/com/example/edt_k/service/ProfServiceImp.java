@@ -22,11 +22,16 @@ public class ProfServiceImp implements ProfService{
     }
 
     @Override
+    public Prof getProfByModule(Module module) {
+        return profRepository.findProfByModules(module).get();
+    }
+
+    @Override
     public Prof random_surveillant(Module course) {
         int i = CommonServices.random_int(0,getProfs().size());
         //le prof qui enseigne le module ne doit pas surveiller
         //
-        while (getProfs().get(i)==moduleServiceImp.getProfByModule(course)){
+        while (getProfs().get(i)==getProfByModule(course)){
             i = CommonServices.random_int(0,getProfs().size());
         }
         return getProfs().get(i);

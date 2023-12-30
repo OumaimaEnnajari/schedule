@@ -27,6 +27,6 @@ public class Prof {
     @ManyToOne
     @JoinColumn(name = "examen_id", referencedColumnName = "id_Examen")
     private Examen examen;
-    @OneToMany(mappedBy = "prof", cascade = CascadeType.ALL)
-    private List<Module> courses;
+    @OneToMany(mappedBy = "Prof", cascade = CascadeType.ALL)
+    private List<Module> modules;
 }

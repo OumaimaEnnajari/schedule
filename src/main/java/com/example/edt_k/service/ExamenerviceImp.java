@@ -1,9 +1,7 @@
 package com.example.edt_k.service;
 
-import com.example.edt_k.entity.Exam_time;
-import com.example.edt_k.entity.Examen;
 import com.example.edt_k.entity.Module;
-import com.example.edt_k.entity.Salle;
+import com.example.edt_k.entity.*;
 import com.example.edt_k.exception.EntityNotFoundException;
 import com.example.edt_k.repository.ExamenRepository;
 import lombok.AllArgsConstructor;
@@ -33,11 +31,21 @@ public class ExamenerviceImp implements ExamenService {
          return unwrapExams(examen,examTime); // si il ya deja un examen dans ce meeting time => not empty => used
     }
 
-    @Override
+   /* @Override
     public boolean isSameExamTime(Exam_time examTime) {
         //si true => il y a des examens programmes pour le meme horaire
         //on ne peut pas faire isEmpty
         return (getExamsByExamTime(examTime).size()>1);
+    }*/
+
+    @Override
+    public boolean isSameExamTime(Exam_time examTime, Gene gene) {
+        for (Examen examen : gene.getExams()
+             ) {
+            if(examen.getExamTime()==examTime)
+                return true;
+        }
+        return false;
     }
 
     static List<Examen> unwrapExams(List<Examen> entities, Exam_time examTime) {
@@ -56,7 +64,7 @@ public class ExamenerviceImp implements ExamenService {
         Set<Salle> salles = salleServiceImp.random_list_salle(filiereServiceImp.getFiliereByModule(module),module.isPrise());
     }*/
 
-    @Override
+    /*@Override
     public Examen random_Examen(Module course) {
        Set<Salle> salles = salleServiceImp.random_list_salle(filiereServiceImp.getFiliereByModule(course).getEffectif(), course.isPrise());
        Examen examen = new Examen();
@@ -65,10 +73,21 @@ public class ExamenerviceImp implements ExamenService {
        examen.setSalles(salles);
         examen.setExamTime(examTimeServiceImp.random_Exam_Time());
         return examen;
+    }*/
+
+    @Override
+    public Examen random_Examen(Gene gene, Module module) {
+        Set<Salle> salles = salleServiceImp.random_list_salle(gene.getFiliere().getEffectif(), module.isPrise());
+        Examen examen = new Examen();
+        examen.setProfs(profServiceImp.random_surveillant_list(salles, module));
+        examen.setCourse(module);
+        examen.setSalles(salles);
+        examen.setExamTime(examTimeServiceImp.random_Exam_Time(gene));
+        return examen;
     }
 
     @Override
     public Examen saveExamen(Examen examen) {
-        return examenRepository.save(examen);
+        return null;
     }
 }

@@ -24,7 +24,7 @@ public class Filiere {
     private int effectif;
 
     @OneToMany(mappedBy = "filiere")
-    private List<Module> courses;
+    private List<Module> modules;
 
     @OneToOne(mappedBy = "filiere", cascade = CascadeType.ALL)
     private Gene gene;

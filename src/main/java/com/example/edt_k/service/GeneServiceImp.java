@@ -1,11 +1,11 @@
 package com.example.edt_k.service;
 
+import com.example.edt_k.entity.Filiere;
+import com.example.edt_k.entity.Gene;
 import com.example.edt_k.entity.Module;
 import com.example.edt_k.repository.GeneRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -14,12 +14,12 @@ public class GeneServiceImp implements GeneService{
     private ModuleServiceImp moduleServiceImp;
     private ExamenerviceImp examenerviceImp;
 
-    //l'argument represente les modules d'une filiere donnée
     @Override
-    public void generate_random_edt(List<Module> modules) {
-        for (Module module:modules
-             ) {
-            examenerviceImp.saveExamen(examenerviceImp.random_Examen(module));
+    public Gene generate_random_edt(Filiere filiere) {
+        Gene gene = new Gene();
+        gene.setFiliere(filiere);
+        for (Module module: filiere.getModules()){
+          gene.(examenerviceImp.random_Examen(gene,module));
         }
     }
 }

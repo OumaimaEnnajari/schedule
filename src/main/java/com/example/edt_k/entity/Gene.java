@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -29,6 +30,16 @@ public class Gene {
     @OneToMany(mappedBy = "gene",cascade = CascadeType.ALL)
     private List<Examen> exams;
 
+    public List<Exam_time> getmeetingtimes()
+     {
+         List<Exam_time> liste=new ArrayList<>();
+
+         for(Examen exam: exams)
+         {
+             liste.add(exam.getExamTime());
+         }
+       return liste;
+     }
     @Column(name = "date_generation")
     private LocalDateTime currentDate;
 }
