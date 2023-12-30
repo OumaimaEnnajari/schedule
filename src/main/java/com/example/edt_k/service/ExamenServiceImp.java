@@ -12,7 +12,7 @@ import java.util.Set;
 
 @Service
 @AllArgsConstructor
-public class ExamenerviceImp implements ExamenService {
+public class ExamenServiceImp implements ExamenService {
     private ExamenRepository examenRepository;
     private SalleServiceImp salleServiceImp;
     private FiliereServiceImp filiereServiceImp;

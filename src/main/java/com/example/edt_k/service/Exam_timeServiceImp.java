@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class Exam_timeServiceImp implements Exam_timeService {
     private Exam_timeRepository examTimeRepository;
-    private ExamenerviceImp examenerviceImp;
+    private ExamenServiceImp examenerviceImp;
 
 
 
