@@ -80,7 +80,7 @@ public class ExamenServiceImp implements ExamenService {
         Set<Salle> salles = salleServiceImp.random_list_salle(gene.getFiliere().getEffectif(), module.isPrise());
         Examen examen = new Examen();
         examen.setProfs(profServiceImp.random_surveillant_list(salles, module));
-        examen.setCourse(module);
+        examen.setModule(module);
         examen.setSalles(salles);
         examen.setExamTime(examTimeServiceImp.random_Exam_Time(gene));
         return examen;

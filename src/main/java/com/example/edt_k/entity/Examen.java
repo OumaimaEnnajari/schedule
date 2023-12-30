@@ -29,10 +29,9 @@ public class Examen {
     @OneToOne
     private Exam_time examTime;
 
-    @OneToOne // One exam for each module
-    @JoinColumn(name = "module_id",nullable = false)
-    private Module course;
-
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "module_id", referencedColumnName = "id_Module")
+    private Module module;
     @ManyToOne
     @JoinColumn(name = "gene_id", nullable = false)
     private Gene gene;

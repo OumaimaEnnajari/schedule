@@ -21,17 +21,15 @@ public class Module {
     @Column(name = "prise", nullable = false)
     private boolean prise;
 
-    // Many modules can be associated with one filiere
     @ManyToOne(optional = false)
     @JoinColumn(name = "filiere_id", referencedColumnName = "id_filiere")
     private Filiere filiere;
 
-    @OneToOne(mappedBy = "module")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "module")
     private Examen examen;
-
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "prof_id", referencedColumnName = "id_Prof", unique = true)
-    private Prof Prof;
+    private Prof prof;
 
 }
