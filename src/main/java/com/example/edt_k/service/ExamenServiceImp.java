@@ -4,19 +4,23 @@ import com.example.edt_k.entity.Module;
 import com.example.edt_k.entity.*;
 import com.example.edt_k.exception.EntityNotFoundException;
 import com.example.edt_k.repository.ExamenRepository;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Set;
 
 @Service
-@AllArgsConstructor
 public class ExamenServiceImp implements ExamenService {
+    @Autowired
     private ExamenRepository examenRepository;
+    @Autowired
     private SalleServiceImp salleServiceImp;
-    private FiliereServiceImp filiereServiceImp;
+    @Autowired
     private ProfServiceImp profServiceImp;
+    @Lazy
+    @Autowired
     private  Exam_timeServiceImp examTimeServiceImp;
 
 

@@ -4,10 +4,12 @@ import com.example.edt_k.entity.Exam_time;
 import com.example.edt_k.entity.Gene;
 import com.example.edt_k.repository.Exam_timeRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
+@Lazy
 public class Exam_timeServiceImp implements Exam_timeService {
     private Exam_timeRepository examTimeRepository;
     private ExamenServiceImp examenerviceImp;
