@@ -32,4 +32,7 @@ public class Module {
     @JoinColumn(name = "prof_id", referencedColumnName = "id_Prof", unique = true)
     private Prof prof;
 
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "semestre_id", referencedColumnName = "id_Semestre")
+    private Semestre semestre;
 }
