@@ -37,4 +37,9 @@ public class GeneServiceImp implements GeneService{
         gene.setExams(examenList);
         return gene;
     }
+
+    @Override
+    public Gene saveGene(Gene gene) {
+        return geneRepository.save(gene);
+    }
 }

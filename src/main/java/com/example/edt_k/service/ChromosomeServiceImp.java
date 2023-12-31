@@ -74,19 +74,21 @@ public class ChromosomeServiceImp implements ChromosomeService {
     }
 
     @Override
-    public Chromosome genetic_algo(Population population,Semestre semestre) {
-        Population pop = population;
-        int iterations = 0;
-        int fitness=0;
-
+    public Chromosome genetic_algo(Semestre semestre) {
+        Population pop = new Population();
+        pop=populationServiceimp.generer_population(semestre);
         while (pop.getChromosomes().get(0).getFitness() != 1) {
             pop = populationServiceimp.evolve(pop,semestre);
             for (Chromosome chromosome:pop.getChromosomes()){
                 chromosome.setFitness(calcul_fitness(chromosome));
             }
             Collections.sort(pop.getChromosomes());
-            iterations++;
+        }
+        for (Gene gene:pop.getChromosomes().get(0).getGenes()){
+            geneServiceImp.saveGene(gene);
         }
         return pop.getChromosomes().get(0);
     }
+
+
 }
