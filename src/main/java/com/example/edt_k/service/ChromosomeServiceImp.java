@@ -3,6 +3,7 @@ package com.example.edt_k.service;
 import com.example.edt_k.entity.Chromosome;
 import com.example.edt_k.entity.Filiere;
 import com.example.edt_k.entity.Gene;
+import com.example.edt_k.entity.Semestre;
 import com.example.edt_k.repository.FiliereRepository;
 import com.example.edt_k.repository.GeneRepository;
 import lombok.AllArgsConstructor;
@@ -27,11 +28,11 @@ public class ChromosomeServiceImp implements ChromosomeService {
     List<Gene> genes;
 
     @Override
-    public Chromosome generate_schedules() {
+    public Chromosome generate_schedules(Semestre semestre) {
         Chromosome chromosome=new Chromosome();
         genes=new ArrayList<>();
         for (Filiere filiere:filiereServiceImp.getFiliere()){
-            genes.add(geneServiceImp.generate_random_edt(filiere));
+            genes.add(geneServiceImp.generate_random_edt(filiere,semestre));
         }
         fitness = calcul_fitness();
 
@@ -39,15 +40,15 @@ public class ChromosomeServiceImp implements ChromosomeService {
     }
 
     @Override
-    public Chromosome crossoverChromosome(Chromosome chromosome1, Chromosome chromosome2) {
-        Chromosome chromosome = generate_schedules();
+    public Chromosome crossoverChromosome(Chromosome chromosome1, Chromosome chromosome2, Semestre semestre) {
+        Chromosome chromosome = generate_schedules(semestre);
         IntStream.range(0, chromosome.getGenes().size()).forEach(x->{
             if (Math.random() <0.45){
                 chromosome.getGenes().set(x, chromosome1.getGenes().get(x));
             } else if (Math.random()<0.9) {
                 chromosome.getGenes().set(x, chromosome2.getGenes().get(x));
             }else {
-                chromosome.getGenes().set(x,geneServiceImp.generate_random_edt(chromosome1.getGenes().get(x).getFiliere()));
+                chromosome.getGenes().set(x,geneServiceImp.generate_random_edt(chromosome1.getGenes().get(x).getFiliere(),semestre));
             }
         });
         return chromosome;
