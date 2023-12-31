@@ -10,7 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Population {
-    private int size;
+    private final int size=50;
     private List<Chromosome> chromosomes=new ArrayList<>();
 
 

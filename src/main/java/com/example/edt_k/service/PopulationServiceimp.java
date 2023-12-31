@@ -4,18 +4,20 @@ import com.example.edt_k.entity.Chromosome;
 import com.example.edt_k.entity.Population;
 import com.example.edt_k.entity.Semestre;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.stream.IntStream;
 
 @Service
 public class PopulationServiceimp implements PopulationService{
+    @Lazy
     @Autowired
     private ChromosomeServiceImp chromosomeServiceImp;
     @Override
-    public Population generer_population(Semestre semestre,int size) {
+    public Population generer_population(Semestre semestre) {
         Population p=new Population();
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < p.getSize(); i++) {
             p.getChromosomes().add(chromosomeServiceImp.generate_schedules(semestre));
         }
         Collections.sort(p.getChromosomes());
@@ -24,8 +26,8 @@ public class PopulationServiceimp implements PopulationService{
 
     @Override
     public Population crossoverPopulation(Population population, Semestre semestre) {
-        int size  = population.getSize();
-        Population new_generation = generer_population(semestre,size);
+        int size = population.getSize();
+        Population new_generation = generer_population(semestre);
         //add the 10% of the old best population to the new generation
         IntStream.range(0,pop_per(size,0.1)).forEach(x->{
             new_generation.getChromosomes().set(x,population.getChromosomes().get(x));
@@ -52,5 +54,10 @@ public class PopulationServiceimp implements PopulationService{
     @Override
     public int random_int(int start, int end) {
         return  (int)((end-start)*Math.random()) + start;
+    }
+
+    @Override
+    public Population evolve(Population population,Semestre semestre) {
+        return crossoverPopulation(population,semestre);
     }
 }

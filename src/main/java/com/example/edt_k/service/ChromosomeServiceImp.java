@@ -1,41 +1,32 @@
 package com.example.edt_k.service;
 
-import com.example.edt_k.entity.Chromosome;
-import com.example.edt_k.entity.Filiere;
-import com.example.edt_k.entity.Gene;
-import com.example.edt_k.entity.Semestre;
-import com.example.edt_k.repository.FiliereRepository;
-import com.example.edt_k.repository.GeneRepository;
+import com.example.edt_k.entity.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
-
 @Service
+@AllArgsConstructor
 public class ChromosomeServiceImp implements ChromosomeService {
-    @Autowired
     private GeneServiceImp geneServiceImp;
+    private PopulationServiceimp populationServiceimp;
     private FiliereServiceImp filiereServiceImp;
     private SalleServiceImp salleServiceImp;
     private ProfServiceImp profServiceImp;
-    private int nbrConflits=0;
-    private double fitness=0;
-    List<Gene> genes;
 
     @Override
     public Chromosome generate_schedules(Semestre semestre) {
         Chromosome chromosome=new Chromosome();
-        genes=new ArrayList<>();
+        List<Gene> genes=new ArrayList<Gene>();
         for (Filiere filiere:filiereServiceImp.getFiliere()){
             genes.add(geneServiceImp.generate_random_edt(filiere,semestre));
         }
-        fitness = calcul_fitness();
-
+        chromosome.setGenes(genes);
+        chromosome.setFitness(calcul_fitness(chromosome));
         return chromosome;
     }
 
@@ -55,23 +46,24 @@ public class ChromosomeServiceImp implements ChromosomeService {
     }
 
     @Override
-    public double calcul_fitness() {
-        nbrConflits+=conflit();
-        return nbrConflits;
+    public double calcul_fitness(Chromosome chromosome) {
+        int nbrConflits = 0;
+        nbrConflits+=conflit(chromosome);
+       return ((double) 1 /(nbrConflits+1));
     }
 
     @Override
-    public int conflit() {
+    public int conflit(Chromosome chromosome) {
         int nbr_conflits=0;
-        for(int i=0;i<genes.size()-1;i++){
-            for (int m=0;m<genes.get(i).getExams().size();m++)
+        for(int i=0;i<chromosome.getGenes().size()-1;i++){
+            for (int m=0;m<chromosome.getGenes().get(i).getExams().size();m++)
             {
-                for (int j=i+1;j<genes.size();j++){
-                    for (int n=0;n<genes.get(j).getExams().size();n++){
-                        if (genes.get(i).getExams().get(m).getExamTime().getId()==genes.get(j).getExams().get(n).getExamTime().getId()){
-                            if (salleServiceImp.haveCommonSalle(genes.get(i).getExams().get(m).getSalles(),genes.get(j).getExams().get(n).getSalles()))
+                for (int j=i+1;j<chromosome.getGenes().size();j++){
+                    for (int n=0;n<chromosome.getGenes().get(j).getExams().size();n++){
+                        if (chromosome.getGenes().get(i).getExams().get(m).getExamTime().getId()==chromosome.getGenes().get(j).getExams().get(n).getExamTime().getId()){
+                            if (salleServiceImp.haveCommonSalle(chromosome.getGenes().get(i).getExams().get(m).getSalles(),chromosome.getGenes().get(j).getExams().get(n).getSalles()))
                                 nbr_conflits++;
-                            if (profServiceImp.haveCommonSurveillant(genes.get(i).getExams().get(m).getProfs(),genes.get(j).getExams().get(n).getProfs()))
+                            if (profServiceImp.haveCommonSurveillant(chromosome.getGenes().get(i).getExams().get(m).getProfs(),chromosome.getGenes().get(j).getExams().get(n).getProfs()))
                                 nbr_conflits++;
                         }
                     }
@@ -79,5 +71,22 @@ public class ChromosomeServiceImp implements ChromosomeService {
             }
         }
         return nbr_conflits;
+    }
+
+    @Override
+    public Chromosome genetic_algo(Population population,Semestre semestre) {
+        Population pop = population;
+        int iterations = 0;
+        int fitness=0;
+
+        while (pop.getChromosomes().get(0).getFitness() != 1) {
+            pop = populationServiceimp.evolve(pop,semestre);
+            for (Chromosome chromosome:pop.getChromosomes()){
+                chromosome.setFitness(calcul_fitness(chromosome));
+            }
+            Collections.sort(pop.getChromosomes());
+            iterations++;
+        }
+        return pop.getChromosomes().get(0);
     }
 }

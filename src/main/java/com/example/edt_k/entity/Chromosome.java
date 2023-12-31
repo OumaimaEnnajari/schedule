@@ -9,9 +9,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Chromosome implements Comparable<Chromosome>{
-    private int nbrConflits=0;
     private double fitness=0;
-    List<Gene> genes;
+    private  List<Gene> genes;
 
     @Override
     public int compareTo(Chromosome o) {
