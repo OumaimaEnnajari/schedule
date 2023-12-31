@@ -27,6 +27,16 @@ public class ProfServiceImp implements ProfService{
     }
 
     @Override
+    public boolean haveCommonSurveillant(Set<Prof> surveillant1, Set<Prof> surveillant2) {
+        for (Prof prof : surveillant1) {
+            if (surveillant2.contains(prof)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
     public Prof random_surveillant(Module course) {
         int i = CommonServices.random_int(0,getProfs().size());
         //le prof qui enseigne le module ne doit pas surveiller

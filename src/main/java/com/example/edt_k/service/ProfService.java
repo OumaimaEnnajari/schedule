@@ -15,4 +15,6 @@ public interface ProfService {
     Set<Prof> random_surveillant_list(Set<Salle> salles , Module course);
 
     Prof getProfByModule(Module module);
+
+    boolean haveCommonSurveillant(Set<Prof> surveillant1, Set<Prof> surveillant2);
 }
