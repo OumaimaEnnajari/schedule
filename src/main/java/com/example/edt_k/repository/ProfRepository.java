@@ -9,6 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface ProfRepository extends CrudRepository<Prof,Long> {
-    Optional<Prof> findProfByModules(Module module);
+    Optional<Prof> findProfByModules(Optional<Module> module);
 
 }

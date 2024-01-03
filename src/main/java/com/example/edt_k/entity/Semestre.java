@@ -1,5 +1,6 @@
 package com.example.edt_k.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,6 +22,16 @@ public class Semestre {
     @Column(name = "id_Semestre")
     private long id;
 
+    @Override
+    public String toString() {
+        return "Semestre{" +
+                "id=" + id +
+                ", nom='" + nom + '\'' +
+                ", debut=" + debut +
+                ", fin=" + fin +
+                '}';
+    }
+
     @Column(name = "nom", nullable = false)
     private String nom;
 
@@ -29,7 +40,8 @@ public class Semestre {
 
     @Column(name = "fin", nullable = false)
     private LocalDate fin;
-
+@JsonIgnore
     @OneToMany(mappedBy = "semestre", cascade = CascadeType.ALL)
     private List<Module> modules;
+
 }

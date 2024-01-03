@@ -24,12 +24,12 @@ public class SalleServiceImp implements SalleService {
     @Override
     public Salle random_salle(boolean avecPrise) {
         //un indice pour acceder a une salle aléatoirement
-        int i=CommonServices.random_int(0,getSalles().size());
+        int i=CommonServices.random_int(1, (int) salleRepository.count());
         //si le module necessite une prise
         if (avecPrise)
             //tant que la salle ne contient pas de prise donnez moi un autre indice et le module necessite prise redonner moi un indice aleatoire pour acceder a une saale aleatoire et revérifier la condition
             while(!getSalles().get(i).isPrise()){
-                i=CommonServices.random_int(0,getSalles().size());
+                i=CommonServices.random_int(1, (int) salleRepository.count());
             }
         //une fois la salle avec prise est trouvé on la retourne
         return getSalles().get(i);

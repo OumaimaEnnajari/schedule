@@ -13,7 +13,6 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name="gene")
 public class Gene {
@@ -30,16 +29,20 @@ public class Gene {
     @OneToMany(mappedBy = "gene",cascade = CascadeType.ALL)
     private List<Examen> exams;
 
-    public List<Exam_time> getmeetingtimes()
-     {
-         List<Exam_time> liste=new ArrayList<>();
+    @Override
+    public String toString() {
+        return "Gene{" +
+                "id=" + id +
+                ", filiere=" + filiere +
+                ", exams=" + exams +
+                ", currentDate=" + currentDate +
+                '}';
+    }
 
-         for(Examen exam: exams)
-         {
-             liste.add(exam.getExamTime());
-         }
-       return liste;
-     }
     @Column(name = "date_generation")
     private LocalDateTime currentDate;
+    public Gene(){
+        this.exams=new ArrayList<>();
+
+    }
 }

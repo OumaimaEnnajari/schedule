@@ -12,8 +12,8 @@ public interface ExamenService {
     List<Examen> getExamsByExamTime(Exam_time examTime);
     //on ne doit pas avoir des examens avec les meme exam_time(date,horaire) pour une filiere donnée
     //vérifie si un créneau horaire ds examTime est déja utilisé ou affecté a un edt d'une filiere (gene)
-    boolean isSameExamTime(Exam_time examTime, Gene gene);
+
     Examen random_Examen(Gene gene, Module module);
-    Examen saveExamen(Examen examen);
+    void saveExamen(Examen examen);
 
 }

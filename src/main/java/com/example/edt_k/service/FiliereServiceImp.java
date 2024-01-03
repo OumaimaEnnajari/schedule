@@ -7,13 +7,14 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
 public class FiliereServiceImp implements FiliereService{
     private FiliereRepository filiereRepository;
     @Override
-    public Filiere getFiliereByModule(Module course) {
+    public Filiere getFiliereByModule(Optional<Module> course) {
         return filiereRepository.findByModules(course);
     }
 

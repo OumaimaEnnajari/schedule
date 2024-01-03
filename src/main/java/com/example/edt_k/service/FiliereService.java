@@ -4,9 +4,10 @@ import com.example.edt_k.entity.Filiere;
 import com.example.edt_k.entity.Module;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface FiliereService {
-    Filiere getFiliereByModule(Module course);
+    Filiere getFiliereByModule(Optional<Module> course);
     public List<Filiere> getFiliere();
 
 }

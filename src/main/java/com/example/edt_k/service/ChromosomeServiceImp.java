@@ -2,27 +2,30 @@ package com.example.edt_k.service;
 
 import com.example.edt_k.entity.*;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.IntStream;
 @Service
 @AllArgsConstructor
 public class ChromosomeServiceImp implements ChromosomeService {
     private GeneServiceImp geneServiceImp;
-    private PopulationServiceimp populationServiceimp;
     private FiliereServiceImp filiereServiceImp;
     private SalleServiceImp salleServiceImp;
     private ProfServiceImp profServiceImp;
 
     @Override
-    public Chromosome generate_schedules(Semestre semestre) {
+    public Chromosome generate_schedules(Optional<Semestre> semestre) {
+        return generate_schedules(semestre, filiereServiceImp.getFiliere());
+    }
+
+    @Override
+    public Chromosome generate_schedules(Optional<Semestre> semestre, List<Filiere> filieres) {
         Chromosome chromosome=new Chromosome();
-        List<Gene> genes=new ArrayList<Gene>();
-        for (Filiere filiere:filiereServiceImp.getFiliere()){
+        List<Gene> genes=new ArrayList<>();
+        for (Filiere filiere:filieres){
             genes.add(geneServiceImp.generate_random_edt(filiere,semestre));
         }
         chromosome.setGenes(genes);
@@ -31,8 +34,8 @@ public class ChromosomeServiceImp implements ChromosomeService {
     }
 
     @Override
-    public Chromosome crossoverChromosome(Chromosome chromosome1, Chromosome chromosome2, Semestre semestre) {
-        Chromosome chromosome = generate_schedules(semestre);
+    public Chromosome crossoverChromosome(Chromosome chromosome1, Chromosome chromosome2, Optional<Semestre> semestre) {
+        Chromosome chromosome = generate_schedules(semestre, filiereServiceImp.getFiliere());
         IntStream.range(0, chromosome.getGenes().size()).forEach(x->{
             if (Math.random() <0.45){
                 chromosome.getGenes().set(x, chromosome1.getGenes().get(x));
@@ -60,7 +63,7 @@ public class ChromosomeServiceImp implements ChromosomeService {
             {
                 for (int j=i+1;j<chromosome.getGenes().size();j++){
                     for (int n=0;n<chromosome.getGenes().get(j).getExams().size();n++){
-                        if (chromosome.getGenes().get(i).getExams().get(m).getExamTime().getId()==chromosome.getGenes().get(j).getExams().get(n).getExamTime().getId()){
+                        if (chromosome.getGenes().get(i).getExams().get(m).getExamTime().getId().equals(chromosome.getGenes().get(j).getExams().get(n).getExamTime().getId())){
                             if (salleServiceImp.haveCommonSalle(chromosome.getGenes().get(i).getExams().get(m).getSalles(),chromosome.getGenes().get(j).getExams().get(n).getSalles()))
                                 nbr_conflits++;
                             if (profServiceImp.haveCommonSurveillant(chromosome.getGenes().get(i).getExams().get(m).getProfs(),chromosome.getGenes().get(j).getExams().get(n).getProfs()))
@@ -73,21 +76,11 @@ public class ChromosomeServiceImp implements ChromosomeService {
         return nbr_conflits;
     }
 
+
+
     @Override
-    public Chromosome genetic_algo(Semestre semestre) {
-        Population pop = new Population();
-        pop=populationServiceimp.generer_population(semestre);
-        while (pop.getChromosomes().get(0).getFitness() != 1) {
-            pop = populationServiceimp.evolve(pop,semestre);
-            for (Chromosome chromosome:pop.getChromosomes()){
-                chromosome.setFitness(calcul_fitness(chromosome));
-            }
-            Collections.sort(pop.getChromosomes());
-        }
-        for (Gene gene:pop.getChromosomes().get(0).getGenes()){
-            geneServiceImp.saveGene(gene);
-        }
-        return pop.getChromosomes().get(0);
+    public Chromosome genetic_algo(Semestre semestre, List<Filiere> filieres) {
+        return null;
     }
 
 

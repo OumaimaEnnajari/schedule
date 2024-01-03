@@ -1,6 +1,7 @@
 package com.example.edt_k.service;
 
 import com.example.edt_k.entity.Exam_time;
+import com.example.edt_k.entity.Examen;
 import com.example.edt_k.entity.Gene;
 import com.example.edt_k.repository.Exam_timeRepository;
 import lombok.AllArgsConstructor;
@@ -9,10 +10,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-@Lazy
 public class Exam_timeServiceImp implements Exam_timeService {
     private Exam_timeRepository examTimeRepository;
-    private ExamenServiceImp examenerviceImp;
+
 
 
 
@@ -32,12 +32,21 @@ public class Exam_timeServiceImp implements Exam_timeService {
     @Override
     public Exam_time random_Exam_Time(Gene gene) {
         //donner un indice aléatoire
-        int i = CommonServices.random_int(0,gene.getmeetingtimes().size());
+        int  i = CommonServices.random_int(1, (int) examTimeRepository.count());
         //tant le exam_time est déja affécté a un exam redonnez un indice
-        while (examenerviceImp.isSameExamTime(gene.getmeetingtimes().get(i),gene)){
-            i = CommonServices.random_int(0,gene.getmeetingtimes().size());
+        while (isSameExamTime(examTimeRepository.findById((long) i).get(),gene)){
+            i = CommonServices.random_int(1,(int) examTimeRepository.count());
         }
         //si n'est pas déja affecté
-        return gene.getmeetingtimes().get(i);
+        return examTimeRepository.findById((long) i).get();
+    }
+    @Override
+    public boolean isSameExamTime(Exam_time examTime, Gene gene) {
+        for (Examen examen : gene.getExams()
+        ) {
+            if(examen.getExamTime().equals(examTime))
+                return true;
+        }
+        return false;
     }
 }

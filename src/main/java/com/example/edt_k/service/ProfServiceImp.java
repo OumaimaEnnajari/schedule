@@ -9,20 +9,20 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
 @AllArgsConstructor
 public class ProfServiceImp implements ProfService{
     private ProfRepository profRepository;
-    private ModuleServiceImp moduleServiceImp;
     @Override
     public List<Prof> getProfs() {
         return (List<Prof>) profRepository.findAll();
     }
 
     @Override
-    public Prof getProfByModule(Module module) {
+    public Prof getProfByModule(Optional<Module> module) {
         return profRepository.findProfByModules(module).get();
     }
 
@@ -37,7 +37,7 @@ public class ProfServiceImp implements ProfService{
     }
 
     @Override
-    public Prof random_surveillant(Module course) {
+    public Prof random_surveillant(Optional<Module> course) {
         int i = CommonServices.random_int(0,getProfs().size());
         //le prof qui enseigne le module ne doit pas surveiller
         //
@@ -51,7 +51,7 @@ public class ProfServiceImp implements ProfService{
     //l'ensemble des salles pour laquelle on souhaite affecter un surveilants
 
     @Override
-    public Set<Prof> random_surveillant_list(Set<Salle> salles, Module course) {
+    public Set<Prof> random_surveillant_list(Set<Salle> salles, Optional<Module> course) {
         Set<Prof> surveillants = new HashSet<>();
         for (Salle salle:salles
         ) {

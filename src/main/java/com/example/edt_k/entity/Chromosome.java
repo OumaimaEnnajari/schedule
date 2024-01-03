@@ -13,6 +13,14 @@ public class Chromosome implements Comparable<Chromosome>{
     private  List<Gene> genes;
 
     @Override
+    public String toString() {
+        return "Chromosome{" +
+                "fitness=" + fitness +
+                ", genes=" + genes +
+                '}';
+    }
+
+    @Override
     public int compareTo(Chromosome o) {
         return Double.compare(o.fitness,this.fitness);
     }

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Fetch;
 
 @Getter
 @Setter
@@ -20,6 +21,19 @@ public class Module {
 
     @Column(name = "prise", nullable = false)
     private boolean prise;
+    @Column(name = "nom", nullable = true)
+    private String nom;
+
+    @Override
+    public String toString() {
+        return "Module{" +
+                "id=" + id +
+                ", prise=" + prise +
+                ", nom='" + nom + '\'' +
+                ", prof=" + prof +
+                ", semestre=" + semestre +
+                '}';
+    }
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "filiere_id", referencedColumnName = "id_filiere")

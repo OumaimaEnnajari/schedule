@@ -10,7 +10,16 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Population {
-    private final int size=50;
+    private final int size=5;
+
+    @Override
+    public String toString() {
+        return "Population{" +
+                "size=" + size +
+                ", chromosomes=" + chromosomes +
+                '}';
+    }
+
     private List<Chromosome> chromosomes=new ArrayList<>();
 
 
