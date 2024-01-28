@@ -6,6 +6,7 @@ import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -17,7 +18,7 @@ import java.util.Objects;
 public class Exam_time {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_Exam_time")
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "day")
@@ -44,7 +45,6 @@ public class Exam_time {
     @Override
     public String toString() {
         return "Exam_time{" +
-                "id=" + id +
                 ", day=" + day +
                 ", debutExamen=" + debutExamen +
                 ", durationMinutes=" + durationMinutes +
@@ -53,8 +53,7 @@ public class Exam_time {
 
     @Column(name = "duration_minutes")
     private int durationMinutes;
-@JsonIgnore
-    // In a specific meeting time, we will have only one exam
-    @OneToOne(mappedBy = "examTime")
-    private Examen examen;
+    @JsonIgnore
+    @OneToMany(mappedBy = "examTime", cascade = CascadeType.ALL)
+    private List<Examen> examen;
 }

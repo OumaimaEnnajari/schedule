@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -19,7 +20,7 @@ import java.util.Objects;
 public class Prof {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_Prof")
+    @Column(name = "id")
     private Long id;
 
     @Override
@@ -38,7 +39,7 @@ public class Prof {
     @Override
     public String toString() {
         return "Prof{" +
-                "id=" + id +
+
                 ", nom='" + nom + '\'' +
 
                 '}';
@@ -46,12 +47,28 @@ public class Prof {
 
     @Column(name = "nom", nullable = false)
     private String nom;
-@JsonIgnore
-    // Several professors can supervise an exam at the same time
-    @ManyToOne
-    @JoinColumn(name = "examen_id", referencedColumnName = "id_Examen")
-    private Examen examen;
+
 @JsonIgnore
     @OneToMany(mappedBy = "prof", cascade = CascadeType.ALL)
     private List<Module> modules;
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+            name = "prof_salle",
+            joinColumns = @JoinColumn(name = "prof_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "salle_id", referencedColumnName = "id")
+    )
+    private Set<Salle> salles ;
+
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+            name = "examen_prof",
+            joinColumns = @JoinColumn(name = "prof_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "examen_id", referencedColumnName = "id")
+    )
+    private Set<Examen> examens;
+
+
+
 }

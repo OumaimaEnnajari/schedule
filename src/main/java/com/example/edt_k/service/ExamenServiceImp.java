@@ -45,6 +45,7 @@ public class ExamenServiceImp implements ExamenService {
         }
     }
 
+
     @Override
     public Examen random_Examen(Gene gene, Module module) {
         Set<Salle> salles = salleServiceImp.random_list_salle(gene.getFiliere().getEffectif(), module.isPrise());

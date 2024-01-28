@@ -1,12 +1,14 @@
 package com.example.edt_k.service;
 
 import com.example.edt_k.entity.Salle;
+import com.example.edt_k.exception.EntityNotFoundException;
 import com.example.edt_k.repository.SalleRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -60,5 +62,35 @@ public class SalleServiceImp implements SalleService {
                return true;
         }
         return false;
+    }
+
+    @Override
+    public Salle getSalle(Long id) {
+        Optional<Salle> salle=salleRepository.findById(id);
+        return unwrapSalle(salle,id);
+    }
+
+    @Override
+    public Salle saveSalle(Salle salle) {
+        return salleRepository.save(salle);
+    }
+
+    @Override
+    public Salle updateSalle(Long id, Salle newSalle) {
+        Optional<Salle> salle=salleRepository.findById(id);
+        Salle unwrapSalle = unwrapSalle(salle,id);
+        unwrapSalle.setCapacite(newSalle.getCapacite());
+        unwrapSalle.setName(newSalle.getName());
+        unwrapSalle.setPrise(newSalle.isPrise());
+        return salleRepository.save(unwrapSalle);
+    }
+
+    @Override
+    public void deleteSalle(Long id) {
+        salleRepository.deleteById(id);
+    }
+    static Salle unwrapSalle(Optional<Salle> entity, Long id) {
+        if (entity.isPresent()) return entity.get();
+        else throw new EntityNotFoundException(id,Salle.class);
     }
 }

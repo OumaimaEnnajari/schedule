@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Objects;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,7 +16,7 @@ import java.util.Objects;
 public class Salle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_Salle")
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "capacite", nullable = false)
@@ -42,7 +43,6 @@ public class Salle {
     @Override
     public String toString() {
         return "Salle{" +
-                "id=" + id +
                 ", capacite=" + capacite +
                 ", prise=" + prise +
                 ", name='" + name + '\'' +
@@ -51,7 +51,20 @@ public class Salle {
 
     // In several rooms, we will find only one exam at a given time
     @JsonIgnore
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "examen_id", referencedColumnName = "id_Examen")
-    private Examen examen;
+    @ManyToMany
+    @JoinTable(
+            name = "prof_salle",
+            joinColumns = @JoinColumn(name = "salle_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "prof_id", referencedColumnName = "id")
+    )
+    private Set<Prof> profs ;
+
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+            name = "examen_salle",
+            joinColumns = @JoinColumn(name = "salle_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "examen_id", referencedColumnName = "id")
+    )
+    private Set<Examen> examens ;
 }

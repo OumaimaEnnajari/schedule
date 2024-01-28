@@ -8,6 +8,14 @@ import java.util.Optional;
 
 public interface FiliereService {
     Filiere getFiliereByModule(Optional<Module> course);
-    public List<Filiere> getFiliere();
+    List<Filiere> getAllFilieres();
+
+    Optional<Filiere> getFiliereById(Long id);
+
+    Filiere saveFiliere(Filiere filiere);
+
+    void deleteFiliere(Long id);
+    void updateFiliere(Long id, Filiere updatedFiliere);
+
 
 }

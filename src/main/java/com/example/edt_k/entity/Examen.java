@@ -10,43 +10,49 @@ import lombok.Setter;
 import java.util.Set;
 
 @Entity
-@Table(name = "examen")
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "Examen")
 public class Examen {
-
-    @Override
-    public String toString() {
-        return "Examen{" +
-                "id=" + id +
-                ", profs=" + profs +
-                ", salles=" + salles +
-                ", examTime=" + examTime +
-                ", module=" + module +
-                '}';
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_Examen")
+    @Column(name = "id")
     private long id;
 
-    @OneToMany(mappedBy = "examen",fetch = FetchType.LAZY)
-    private Set<Prof> profs;
-
-    @OneToMany(mappedBy = "examen",fetch = FetchType.LAZY)
-    private Set<Salle> salles;
-
-    @OneToOne
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "examTime_id", referencedColumnName = "id")
     private Exam_time examTime;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "module_id", referencedColumnName = "id_Module")
-    private Module module;
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "gene_id", nullable = false)
+
+   /* @ManyToOne(optional = false)
+    @JoinColumn(name = "day_id", referencedColumnName = "id")
+    private Days days;*/
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "gene_id", referencedColumnName = "id")
     private Gene gene;
+
+    @OneToOne
+    @JoinColumn(name = "module_id", referencedColumnName = "id", nullable = false, unique = true)
+    private Module module;
+
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+            name = "examen_prof",
+            joinColumns = @JoinColumn(name = "examen_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "prof_id", referencedColumnName = "id")
+    )
+    private Set<Prof> profs;
+
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+            name = "examen_salle",
+            joinColumns = @JoinColumn(name = "examen_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "salle_id", referencedColumnName = "id")
+    )
+    private Set<Salle> salles  ;
 }

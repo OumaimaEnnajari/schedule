@@ -10,11 +10,13 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Getter
 @Setter
 @AllArgsConstructor
 @Entity
 @Table(name="gene")
+
 public class Gene {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,17 +24,16 @@ public class Gene {
     private Long id;
     //un edt corresponf a un gene
     @OneToOne
-    @JoinColumn(name = "filiere_id",referencedColumnName = "id_filiere",nullable = false,unique = true)
+    @JoinColumn(name = "filiere_id",referencedColumnName = "id",nullable = false,unique = true)
     private Filiere filiere;
 
     //one timetable contains many exams
-    @OneToMany(mappedBy = "gene",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "gene", cascade = CascadeType.ALL)
     private List<Examen> exams;
 
     @Override
     public String toString() {
         return "Gene{" +
-                "id=" + id +
                 ", filiere=" + filiere +
                 ", exams=" + exams +
                 ", currentDate=" + currentDate +

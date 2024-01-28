@@ -2,7 +2,6 @@ package com.example.edt_k.service;
 
 import com.example.edt_k.entity.Filiere;
 import com.example.edt_k.entity.Module;
-import com.example.edt_k.entity.Semestre;
 import com.example.edt_k.repository.ModuleRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,10 +13,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class ModuleServiceImp implements ModuleService{
     private ModuleRepository moduleRepository;
-    @Override
-    public List<Module> getModuleBySemestre(Optional<Semestre> semestre) {
-        return moduleRepository.findBySemestre(semestre);
-    }
+
 
     @Override
     public Optional<Module> getModuleById(Long id) {

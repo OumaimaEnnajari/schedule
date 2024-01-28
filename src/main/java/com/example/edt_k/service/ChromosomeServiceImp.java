@@ -17,16 +17,16 @@ public class ChromosomeServiceImp implements ChromosomeService {
     private ProfServiceImp profServiceImp;
 
     @Override
-    public Chromosome generate_schedules(Optional<Semestre> semestre) {
-        return generate_schedules(semestre, filiereServiceImp.getFiliere());
+    public Chromosome generate_schedules() {
+        return generate_schedules(filiereServiceImp.getAllFilieres());
     }
 
     @Override
-    public Chromosome generate_schedules(Optional<Semestre> semestre, List<Filiere> filieres) {
+    public Chromosome generate_schedules( List<Filiere> filieres) {
         Chromosome chromosome=new Chromosome();
         List<Gene> genes=new ArrayList<>();
         for (Filiere filiere:filieres){
-            genes.add(geneServiceImp.generate_random_edt(filiere,semestre));
+            genes.add(geneServiceImp.generate_random_edt(filiere));
         }
         chromosome.setGenes(genes);
         chromosome.setFitness(calcul_fitness(chromosome));
@@ -34,15 +34,15 @@ public class ChromosomeServiceImp implements ChromosomeService {
     }
 
     @Override
-    public Chromosome crossoverChromosome(Chromosome chromosome1, Chromosome chromosome2, Optional<Semestre> semestre) {
-        Chromosome chromosome = generate_schedules(semestre, filiereServiceImp.getFiliere());
+    public Chromosome crossoverChromosome(Chromosome chromosome1, Chromosome chromosome2) {
+        Chromosome chromosome = generate_schedules( filiereServiceImp.getAllFilieres());
         IntStream.range(0, chromosome.getGenes().size()).forEach(x->{
             if (Math.random() <0.45){
                 chromosome.getGenes().set(x, chromosome1.getGenes().get(x));
             } else if (Math.random()<0.9) {
                 chromosome.getGenes().set(x, chromosome2.getGenes().get(x));
             }else {
-                chromosome.getGenes().set(x,geneServiceImp.generate_random_edt(chromosome1.getGenes().get(x).getFiliere(),semestre));
+                chromosome.getGenes().set(x,geneServiceImp.generate_random_edt(chromosome1.getGenes().get(x).getFiliere()));
             }
         });
         return chromosome;
@@ -79,7 +79,7 @@ public class ChromosomeServiceImp implements ChromosomeService {
 
 
     @Override
-    public Chromosome genetic_algo(Semestre semestre, List<Filiere> filieres) {
+    public Chromosome genetic_algo( List<Filiere> filieres) {
         return null;
     }
 

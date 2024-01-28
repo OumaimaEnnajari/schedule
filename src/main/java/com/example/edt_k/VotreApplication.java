@@ -16,7 +16,7 @@ public class VotreApplication {
     public static void main(String[] args) {
         ConfigurableApplicationContext context = SpringApplication.run(VotreApplication.class, args);
         SalleService salleService = context.getBean(SalleService.class);
-        SemestreService semestreService=context.getBean(SemestreService.class);
+
         ProfService profService=context.getBean(ProfService.class);
         ModuleService moduleService=context.getBean(ModuleService.class);
         PopulationService populationService= context.getBean(PopulationService.class);
@@ -27,16 +27,15 @@ public class VotreApplication {
 
         Optional<Module> module=moduleService.getModuleById(8L);
 
-        Filiere filiere=filiereService.getFiliereByModule(module);
-       List<Module> modules=moduleService.getModulesByFiliere(filiere);
 
 
-        Optional<Semestre> semestre=semestreService.getSemestreById(1L);
+
+        /*Optional<Semestre> semestre=semestreService.getSemestreById(1L);
         Gene gene=new Gene();
        //gene=geneService.generate_random_edt(filiere,semestre);
        // System.out.println(gene);
         Chromosome c=populationService.genetic_algo(semestre);
-        System.out.println(c);
+        System.out.println(c);*/
 
 
 

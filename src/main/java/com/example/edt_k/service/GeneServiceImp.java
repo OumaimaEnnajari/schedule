@@ -4,7 +4,6 @@ import com.example.edt_k.entity.Examen;
 import com.example.edt_k.entity.Module;
 import com.example.edt_k.entity.Filiere;
 import com.example.edt_k.entity.Gene;
-import com.example.edt_k.entity.Semestre;
 import com.example.edt_k.repository.GeneRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -23,7 +22,7 @@ public class GeneServiceImp implements GeneService{
     private FiliereServiceImp filiereServiceImp;
 
     @Override
-    public Gene generate_random_edt(Filiere filiere, Optional<Semestre> semestre) {
+    public Gene generate_random_edt(Filiere filiere) {
         Gene gene = new Gene();
         gene.setFiliere(filiere);
         List<Examen> examenList = new ArrayList<>();

@@ -19,8 +19,40 @@ public class FiliereServiceImp implements FiliereService{
     }
 
     @Override
-    public List<Filiere> getFiliere() {
+    public List<Filiere> getAllFilieres() {
         return filiereRepository.findAll();
     }
+
+    @Override
+    public Optional<Filiere> getFiliereById(Long id) {
+        return filiereRepository.findById(id);
+    }
+
+    @Override
+    public Filiere saveFiliere(Filiere filiere) {
+        return filiereRepository.save(filiere);
+    }
+
+    @Override
+    public void deleteFiliere(Long id) {
+        filiereRepository.deleteById(id);
+    }
+
+    @Override
+    public void updateFiliere(Long id, Filiere updatedFiliere) {
+        Optional<Filiere> existingFiliere = filiereRepository.findById(id);
+
+        if (existingFiliere.isPresent()) {
+            Filiere filiereToUpdate = existingFiliere.get();
+            filiereToUpdate.setNom_filiere(updatedFiliere.getNom_filiere());
+            filiereToUpdate.setEffectif(updatedFiliere.getEffectif());
+            // Mettez à jour d'autres propriétés si nécessaire
+            filiereRepository.save(filiereToUpdate);
+        } else {
+            // Gérer le cas où la filière n'existe pas
+            throw new RuntimeException("Filiere not found with id: " + id);
+        }
+    }
+
 
 }

@@ -1,9 +1,7 @@
 package com.example.edt_k.service;
 
 import com.example.edt_k.entity.Chromosome;
-import com.example.edt_k.entity.Gene;
 import com.example.edt_k.entity.Population;
-import com.example.edt_k.entity.Semestre;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.Collections;
@@ -15,12 +13,12 @@ import java.util.stream.IntStream;
 public class PopulationServiceimp implements PopulationService{
     private ChromosomeServiceImp chromosomeServiceImp;
     private FiliereServiceImp filiereServiceImp;
-    private GeneServiceImp geneServiceImp;
+
     @Override
-    public Chromosome genetic_algo(Optional<Semestre> semestre) {
-        Population pop = generer_population(semestre);
+    public Chromosome genetic_algo() {
+        Population pop = generer_population();
         while (pop.getChromosomes().get(0).getFitness() != 1) {
-            pop = evolve(pop,semestre);
+            pop = evolve(pop);
             for (Chromosome chromosome:pop.getChromosomes()){
                 chromosome.setFitness(chromosomeServiceImp.calcul_fitness(chromosome));
             }
@@ -30,10 +28,10 @@ public class PopulationServiceimp implements PopulationService{
         return pop.getChromosomes().get(0);
     }
     @Override
-    public Population generer_population(Optional<Semestre> semestre) {
+    public Population generer_population() {
         Population p=new Population();
         for (int i = 0; i < p.getSize(); i++) {
-            Chromosome c=chromosomeServiceImp.generate_schedules(semestre);
+            Chromosome c=chromosomeServiceImp.generate_schedules();
             p.getChromosomes().add(c);
         }
         Collections.sort(p.getChromosomes());
@@ -41,9 +39,9 @@ public class PopulationServiceimp implements PopulationService{
     }
 
     @Override
-    public Population crossoverPopulation(Population population, Optional<Semestre> semestre) {
+    public Population crossoverPopulation(Population population) {
         int size = population.getSize();
-        Population new_generation = generer_population(semestre);
+        Population new_generation = generer_population();
         //add the 10% of the old best population to the new generation
         IntStream.range(0,pop_per(size,0.1)).forEach(x->{
             new_generation.getChromosomes().set(x,population.getChromosomes().get(x));
@@ -53,10 +51,10 @@ public class PopulationServiceimp implements PopulationService{
             if (Math.random() < 0.9){
                 int r = random_int(0,pop_per(size,0.5));
                 int r2 = random_int(0,pop_per(size,0.5));
-                Chromosome chromosome = chromosomeServiceImp.crossoverChromosome(population.getChromosomes().get(r),population.getChromosomes().get(r2),semestre);
+                Chromosome chromosome = chromosomeServiceImp.crossoverChromosome(population.getChromosomes().get(r),population.getChromosomes().get(r2));
                 new_generation.getChromosomes().set(x,chromosome);
             }else {
-                new_generation.getChromosomes().set(x,chromosomeServiceImp.generate_schedules(semestre, filiereServiceImp.getFiliere()));
+                new_generation.getChromosomes().set(x,chromosomeServiceImp.generate_schedules(filiereServiceImp.getAllFilieres()));
             }
         });
         return new_generation;
@@ -73,7 +71,7 @@ public class PopulationServiceimp implements PopulationService{
     }
 
     @Override
-    public Population evolve(Population population, Optional<Semestre> semestre) {
-        return crossoverPopulation(population,semestre);
+    public Population evolve(Population population) {
+        return crossoverPopulation(population);
     }
 }
