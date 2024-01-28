@@ -12,4 +12,9 @@ public interface ModuleService  {
 
     Optional<Module> getModuleById(Long id);
     public List<Module> getModulesByFiliere(Filiere filiere);
+    Module getById(Long id);
+    List<Module> getAllModules();
+    Module saveModule(Module module);
+    Module updateModule(Long id, Module newModule);
+    void deleteModule(Long id);
 }

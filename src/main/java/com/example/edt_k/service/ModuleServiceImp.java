@@ -26,4 +26,40 @@ public class ModuleServiceImp implements ModuleService{
         return moduleRepository.findByFiliere(filiere);
     }
 
+    @Override
+    public Module getById(Long id) {
+        return moduleRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public List<Module> getAllModules() {
+        return moduleRepository.findAll();
+    }
+
+    @Override
+    public Module saveModule(Module module) {
+        return moduleRepository.save(module);
+    }
+
+    @Override
+    public Module updateModule(Long id, Module newModule) {
+        Module existingModule = moduleRepository.findById(id).orElse(null);
+
+        if (existingModule != null) {
+            // Mettez à jour les propriétés du module existant avec les nouvelles valeurs
+            existingModule.setNom(newModule.getNom());
+            // Ajoutez d'autres propriétés à mettre à jour selon votre modèle
+
+            // Enregistrez les modifications dans le repository
+            return moduleRepository.save(existingModule);
+        }
+
+        return null;
+    }
+
+    @Override
+    public void deleteModule(Long id) {
+        moduleRepository.deleteById(id);
+    }
+
 }
