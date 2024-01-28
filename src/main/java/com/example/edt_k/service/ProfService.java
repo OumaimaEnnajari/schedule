@@ -18,4 +18,8 @@ public interface ProfService {
     Prof getProfByModule(Optional<Module> module);
 
     boolean haveCommonSurveillant(Set<Prof> surveillant1, Set<Prof> surveillant2);
+    Prof saveProf(Prof prof);
+    void updateProf(Prof prof);
+    void deleteProf(Long id);
+    Prof getById(Long id);
 }

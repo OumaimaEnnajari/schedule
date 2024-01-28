@@ -37,6 +37,26 @@ public class ProfServiceImp implements ProfService{
     }
 
     @Override
+    public Prof saveProf(Prof prof) {
+        return profRepository.save(prof);
+    }
+
+    @Override
+    public void updateProf(Prof prof) {
+
+    }
+
+    @Override
+    public void deleteProf(Long id) {
+        profRepository.deleteById(id);
+    }
+
+    @Override
+    public Prof getById(Long id) {
+        return profRepository.findById(id).orElse(null);
+    }
+
+    @Override
     public Prof random_surveillant(Optional<Module> course) {
         int i = CommonServices.random_int(0,getProfs().size());
         //le prof qui enseigne le module ne doit pas surveiller
