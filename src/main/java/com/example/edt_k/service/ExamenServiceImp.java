@@ -6,7 +6,6 @@ import com.example.edt_k.exception.EntityNotFoundException;
 import com.example.edt_k.repository.ExamenRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,13 +30,13 @@ public class ExamenServiceImp implements ExamenService {
     }
 
     @Override
-    public List<Examen> getExamsByExamTime(Exam_time examTime) {
+    public List<Examen> getExamsByExamTime(Duration examTime) {
         List<Examen> examen =  examenRepository.findByExamTime(examTime);
          return unwrapExams(examen,examTime); // si il ya deja un examen dans ce meeting time => not empty => used
     }
 
 
-    static List<Examen> unwrapExams(List<Examen> entities, Exam_time examTime) {
+    static List<Examen> unwrapExams(List<Examen> entities, Duration examTime) {
         if (entities.isEmpty()) { //si pas d'examen ds le meeting time => excep levé
             throw new EntityNotFoundException(examTime, Examen.class);
         }else {
@@ -54,7 +53,7 @@ public class ExamenServiceImp implements ExamenService {
         examen.setModule(module);
         examen.setSalles(salles);
         examen.setGene(gene);
-        examen.setExamTime(examTimeServiceImp.random_Exam_Time(gene));
+       examen.setExamTime(examTimeServiceImp.random_Exam_Time(gene));
         return examen;
     }
 

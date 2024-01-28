@@ -1,20 +1,20 @@
 package com.example.edt_k.service;
 
-import com.example.edt_k.entity.Exam_time;
-import com.example.edt_k.entity.Examen;
-import com.example.edt_k.entity.Gene;
+import com.example.edt_k.entity.*;
+import com.example.edt_k.repository.DaysRepository;
+import com.example.edt_k.repository.DurationRepository;
 import com.example.edt_k.repository.Exam_timeRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @AllArgsConstructor
 public class Exam_timeServiceImp implements Exam_timeService {
     private Exam_timeRepository examTimeRepository;
-
-
-
+    private DaysRepository daysRepository;
+    private DurationRepository durationRepository;
 
     //on doit loop sur tous les exam_time et voir si cette exam est déja affecté ou pas
    /* @Override
@@ -30,7 +30,7 @@ public class Exam_timeServiceImp implements Exam_timeService {
     }*/
 
     @Override
-    public Exam_time random_Exam_Time(Gene gene) {
+    public Exam_Time random_Exam_Time(Gene gene) {
         //donner un indice aléatoire
         int  i = CommonServices.random_int(1, (int) examTimeRepository.count());
         //tant le exam_time est déja affécté a un exam redonnez un indice
@@ -40,13 +40,46 @@ public class Exam_timeServiceImp implements Exam_timeService {
         //si n'est pas déja affecté
         return examTimeRepository.findById((long) i).get();
     }
+
+    /*@Override
+    public Exam_Time random_Exam_Time(Gene gene) {
+        Duration duration = durationServiceImp.random_Duration();
+        Days days = daysServiceImp.random_Day();
+        Exam_Time examTime = new Exam_Time();
+        examTime.setDuration(duration);
+        examTime.setDays(days);
+        return examTime;
+    }*/
+
     @Override
-    public boolean isSameExamTime(Exam_time examTime, Gene gene) {
+    public boolean isSameExamTime(Exam_Time examTime, Gene gene) {
         for (Examen examen : gene.getExams()
         ) {
             if(examen.getExamTime().equals(examTime))
                 return true;
         }
         return false;
+    }
+
+    @Override
+    public Exam_Time associateDaysWithExamTimes(List<Days> daysList, List<Duration> durationList) {
+        Exam_Time lastExamTime = null;
+
+        for (Days day : daysList) {
+            for (Duration duration : durationList) {
+                daysRepository.save(day);
+                durationRepository.save(duration);
+
+                //creer nvl exam time pour chaque combinaison
+                Exam_Time examTime = new Exam_Time();
+                examTime.setDays(day);
+                examTime.setDuration(duration);
+
+                // save exam time ds db
+                lastExamTime = examTimeRepository.save(examTime);
+            }
+        }
+
+        return lastExamTime;
     }
 }
