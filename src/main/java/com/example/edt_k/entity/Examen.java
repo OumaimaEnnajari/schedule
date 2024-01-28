@@ -23,7 +23,7 @@ public class Examen {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "examTime_id", referencedColumnName = "id")
-    private Exam_time examTime;
+    private Exam_Time examTime;
 
 
    /* @ManyToOne(optional = false)
