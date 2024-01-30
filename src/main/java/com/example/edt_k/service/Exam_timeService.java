@@ -11,5 +11,6 @@ public interface Exam_timeService {
 
    Exam_Time random_Exam_Time(Gene gene);
     boolean isSameExamTime(Exam_Time examTime, Gene gene);
-    Exam_Time associateDaysWithExamTimes(List<Days> daysList, List<Duration> durationList);
+    List<Exam_Time> associateDaysWithExamTimes(List<Days> daysList, List<Duration> durationList);
+    List<Exam_Time> getExam_Time();
 }

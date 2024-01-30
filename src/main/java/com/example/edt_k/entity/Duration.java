@@ -21,15 +21,32 @@ public class Duration {
     @Column(name = "id")
     private Long id;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    //@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "debut_exam")
-    private LocalDateTime debutExamen;
+    private String debutExamen;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    //@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "fin_exam")
-    private LocalDateTime FinExamen;
+    private String FinExamen;
 
     @JsonIgnore
     @OneToMany(mappedBy = "duration", cascade = CascadeType.ALL)
     private List<Exam_Time> exam_times;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Duration duration = (Duration) o;
+        return this.debutExamen.equals(duration.getDebutExamen()) && this.FinExamen.equals(duration.getFinExamen());
+    }
+
+    @Override
+    public String toString() {
+        return "Duration{" +
+                "id=" + id +
+                ", debutExamen='" + debutExamen + '\'' +
+                ", FinExamen='" + FinExamen + '\'' +
+                '}';
+    }
 }

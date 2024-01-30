@@ -29,7 +29,6 @@ public class VotreApplication {
 
 
 
-
         /*Optional<Semestre> semestre=semestreService.getSemestreById(1L);
         Gene gene=new Gene();
        //gene=geneService.generate_random_edt(filiere,semestre);

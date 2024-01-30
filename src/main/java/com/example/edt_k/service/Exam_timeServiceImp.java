@@ -7,6 +7,7 @@ import com.example.edt_k.repository.Exam_timeRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -32,10 +33,10 @@ public class Exam_timeServiceImp implements Exam_timeService {
     @Override
     public Exam_Time random_Exam_Time(Gene gene) {
         //donner un indice aléatoire
-        int  i = CommonServices.random_int(1, (int) examTimeRepository.count());
+        int  i = CommonServices.random_int(2, (int) examTimeRepository.count());
         //tant le exam_time est déja affécté a un exam redonnez un indice
         while (isSameExamTime(examTimeRepository.findById((long) i).get(),gene)){
-            i = CommonServices.random_int(1,(int) examTimeRepository.count());
+            i = CommonServices.random_int(2,(int) examTimeRepository.count());
         }
         //si n'est pas déja affecté
         return examTimeRepository.findById((long) i).get();
@@ -62,24 +63,29 @@ public class Exam_timeServiceImp implements Exam_timeService {
     }
 
     @Override
-    public Exam_Time associateDaysWithExamTimes(List<Days> daysList, List<Duration> durationList) {
-        Exam_Time lastExamTime = null;
+    public List<Exam_Time> associateDaysWithExamTimes(List<Days> daysList, List<Duration> durationList) {
+        List<Exam_Time> examTimes = new ArrayList<>();
 
         for (Days day : daysList) {
             for (Duration duration : durationList) {
                 daysRepository.save(day);
                 durationRepository.save(duration);
 
-                //creer nvl exam time pour chaque combinaison
+                // Creer nvl exam time pour chaque combinaison
                 Exam_Time examTime = new Exam_Time();
                 examTime.setDays(day);
                 examTime.setDuration(duration);
 
-                // save exam time ds db
-                lastExamTime = examTimeRepository.save(examTime);
+                // Save l'exam time ds bdd
+                examTimes.add(examTimeRepository.save(examTime));
             }
         }
 
-        return lastExamTime;
+        return examTimes;
+    }
+
+    @Override
+    public List<Exam_Time> getExam_Time() {
+        return (List<Exam_Time>) examTimeRepository.findAll();
     }
 }
