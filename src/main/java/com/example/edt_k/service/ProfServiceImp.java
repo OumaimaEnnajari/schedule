@@ -5,6 +5,7 @@ import com.example.edt_k.entity.Prof;
 import com.example.edt_k.entity.Salle;
 import com.example.edt_k.repository.ProfRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -42,7 +43,40 @@ public class ProfServiceImp implements ProfService{
     }
 
     @Override
-    public void updateProf(Prof prof) {
+    public Prof updateProfPPR(String PPR, Prof prof) {
+
+        Optional<Prof> optionalOldProf = profRepository.getProfByPPR(PPR);
+
+        if (optionalOldProf.isPresent()) {
+            Prof oldProf = optionalOldProf.get();
+            oldProf.setNom(prof.getNom());
+            oldProf.setId(prof.getId());
+            profRepository.save(oldProf);
+            return oldProf;
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public boolean deleteProfPPR(String PPR) {
+        Prof p=profRepository.getProfByPPR(PPR).orElse(null);
+        if(p!=null) {
+            profRepository.supprimerParPPR(PPR);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public Optional<Prof> getByPPR(String ppr) {
+        return profRepository.getProfByPPR(ppr);
+    }
+
+    @Override
+    public Prof updateProf(Long id, Prof newProf) {
+            profRepository.save(newProf);
+            return newProf;
 
     }
 
@@ -90,4 +124,34 @@ public class ProfServiceImp implements ProfService{
 
         } return surveillants;
     }
+    @Override
+    public List<Prof> SearchByMc(String nom) {
+        return profRepository.chercherprof(nom);
+    }
+
+    @Override
+    public boolean deleteProfByID(Long id) {
+        Prof p=profRepository.findById(id).orElse(null);
+        if(p!=null) {
+            profRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+    @Override
+    public Set<Prof> getProfsByExamenId(Long examenId) {
+        return profRepository.findByExamens_Id(examenId);
+    }
+    @Override
+    public Prof getProfById(Long id) {
+        return profRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public Optional<Prof> LoadProfByUserId(Long id) {
+
+        return profRepository.findProfByidUser(id);
+    }
+
+
 }

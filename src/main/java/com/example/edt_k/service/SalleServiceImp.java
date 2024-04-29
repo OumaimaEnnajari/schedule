@@ -22,6 +22,11 @@ public class SalleServiceImp implements SalleService {
     }
 
     //vérifier si module demande une salle avec prise
+    @Override
+    public Set<Salle> getSallesByExamenId(Long examenId) {
+        return salleRepository.findByExamens_Id(examenId);
+    }
+
 
     @Override
     public Salle random_salle(boolean avecPrise) {

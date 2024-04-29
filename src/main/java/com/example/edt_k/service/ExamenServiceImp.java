@@ -30,11 +30,25 @@ public class ExamenServiceImp implements ExamenService {
     }
 
     @Override
-    public List<Examen> getExamsByExamTime(Duration examTime) {
-        List<Examen> examen =  examenRepository.findByExamTime(examTime);
-         return unwrapExams(examen,examTime); // si il ya deja un examen dans ce meeting time => not empty => used
+    public void DeleteAllExams() {
+        examenRepository.deleteAllExams();
     }
 
+    @Override
+    public boolean isExamEmpty() {
+        return examenRepository.countExamRows()>0;
+    }
+
+    @Override
+    public List<Examen> getExamsByExamTime(Duration examTime) {
+        List<Examen> examen =  examenRepository.findByExamTime(examTime);
+        return unwrapExams(examen,examTime); // si il ya deja un examen dans ce meeting time => not empty => used
+    }
+
+    @Override
+    public long countExams() {
+        return examenRepository.countExamRows();
+    }
 
     static List<Examen> unwrapExams(List<Examen> entities, Duration examTime) {
         if (entities.isEmpty()) { //si pas d'examen ds le meeting time => excep levé
@@ -53,7 +67,7 @@ public class ExamenServiceImp implements ExamenService {
         examen.setModule(module);
         examen.setSalles(salles);
         examen.setGene(gene);
-       examen.setExamTime(examTimeServiceImp.random_Exam_Time(gene));
+        examen.setExamTime(examTimeServiceImp.random_Exam_Time(gene));
         return examen;
     }
 

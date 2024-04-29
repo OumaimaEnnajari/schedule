@@ -32,6 +32,10 @@ public class FiliereServiceImp implements FiliereService{
     public Filiere saveFiliere(Filiere filiere) {
         return filiereRepository.save(filiere);
     }
+    @Override
+    public  void deleteFiliereByNom(String nom) {
+        filiereRepository.deleteByNom(nom);
+    }
 
     @Override
     public void deleteFiliere(Long id) {

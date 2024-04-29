@@ -18,10 +18,12 @@ import java.util.Set;
 @Entity
 @Table(name = "Prof")
 public class Prof {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+
 
     @Override
     public boolean equals(Object o) {
@@ -48,10 +50,22 @@ public class Prof {
     @Column(name = "nom", nullable = false)
     private String nom;
 
+
+    @Column(name = "PPR", nullable = true)
+    private String PPR;
+
+
+    @JsonIgnore
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private AppUser user;
+
+
 @JsonIgnore
     @OneToMany(mappedBy = "prof", cascade = CascadeType.ALL)
     private List<Module> modules;
-    @JsonIgnore
+
+@JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "prof_salle",

@@ -15,5 +15,7 @@ public interface ExamenService {
 
     Examen random_Examen(Gene gene, Module module);
     void saveExamen(Examen examen);
-
+    boolean isExamEmpty();
+    void DeleteAllExams();
+    long countExams();
 }

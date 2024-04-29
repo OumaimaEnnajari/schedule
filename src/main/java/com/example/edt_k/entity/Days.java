@@ -22,8 +22,8 @@ public class Days {
     @Column(name = "date", nullable = false)
     private String date;
 
-    @OneToMany(mappedBy = "days", cascade = CascadeType.ALL)
     @JsonIgnore
+    @OneToMany(mappedBy = "days", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Exam_Time> exam_times;
 
     @Override

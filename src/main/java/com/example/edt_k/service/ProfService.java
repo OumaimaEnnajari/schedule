@@ -19,7 +19,17 @@ public interface ProfService {
 
     boolean haveCommonSurveillant(Set<Prof> surveillant1, Set<Prof> surveillant2);
     Prof saveProf(Prof prof);
-    void updateProf(Prof prof);
+    Prof updateProfPPR(String PPR, Prof prof);
+
     void deleteProf(Long id);
     Prof getById(Long id);
+    List<Prof> SearchByMc(String nom);
+    boolean deleteProfByID(Long id);
+    Prof updateProf(Long id, Prof newProf);
+    Set<Prof> getProfsByExamenId(Long examenId);
+    Prof getProfById(Long id);
+    Optional<Prof> LoadProfByUserId(Long id);
+    Optional<Prof>  getByPPR(String ppr);
+    boolean deleteProfPPR(String id);
+
 }

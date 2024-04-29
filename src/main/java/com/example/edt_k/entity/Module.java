@@ -1,14 +1,11 @@
 package com.example.edt_k.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.Fetch;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -33,17 +30,17 @@ public class Module {
 
                 '}';
     }
-
+    @JsonIgnore
     @ManyToOne(optional = false)
     @JoinColumn(name = "filiere_id", referencedColumnName = "id")
     private Filiere filiere;
 
+    @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "module")
     private Examen examen;
-
+    @JsonIgnore
     @ManyToOne(optional = false)
     @JoinColumn(name = "prof_id", referencedColumnName = "id", unique = true)
     private Prof prof;
-
 
 }

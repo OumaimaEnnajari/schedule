@@ -29,6 +29,7 @@ public class Filiere {
     @Column(name = "effectif", nullable = false)
     private int effectif;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "filiere", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private Gene gene;
 

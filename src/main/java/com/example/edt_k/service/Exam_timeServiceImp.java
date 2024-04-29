@@ -2,20 +2,18 @@ package com.example.edt_k.service;
 
 import com.example.edt_k.entity.*;
 import com.example.edt_k.repository.DaysRepository;
-import com.example.edt_k.repository.DurationRepository;
 import com.example.edt_k.repository.Exam_timeRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
 public class Exam_timeServiceImp implements Exam_timeService {
     private Exam_timeRepository examTimeRepository;
     private DaysRepository daysRepository;
-    private DurationRepository durationRepository;
+    private DurationServiceImp durationServiceImp;
 
     //on doit loop sur tous les exam_time et voir si cette exam est déja affecté ou pas
    /* @Override
@@ -31,17 +29,43 @@ public class Exam_timeServiceImp implements Exam_timeService {
     }*/
 
     @Override
-    public Exam_Time random_Exam_Time(Gene gene) {
-        //donner un indice aléatoire
-        int  i = CommonServices.random_int(2, (int) examTimeRepository.count());
-        //tant le exam_time est déja affécté a un exam redonnez un indice
-        while (isSameExamTime(examTimeRepository.findById((long) i).get(),gene)){
-            i = CommonServices.random_int(2,(int) examTimeRepository.count());
-        }
-        //si n'est pas déja affecté
-        return examTimeRepository.findById((long) i).get();
+    public void DeleteAllExamTimes() {
+        examTimeRepository.deleteAllExamsTimes();
     }
 
+    @Override
+    public Exam_Time random_Exam_Time(Gene gene) {
+        // Obtenir une liste d'IDs aléatoires
+        List<Long> ListIds = random_exam_time_int();
+
+        Random random = new Random();
+        int indexAleatoire = random.nextInt(ListIds.size());
+        Long idAleatoire = ListIds.get(indexAleatoire);
+
+        //tant le exam_time est déja affécté a un exam redonnez un indice
+
+        Exam_Time tmp = examTimeRepository.findById(idAleatoire).orElse(null);
+        if(tmp != null)
+        {
+            boolean test=isSameExamTime(tmp,gene);
+            while (test){
+                indexAleatoire = random.nextInt(ListIds.size());
+                idAleatoire = ListIds.get(indexAleatoire);
+                tmp = examTimeRepository.findById(idAleatoire).orElse(null);
+            }
+
+        }
+        //si n'est pas déja affecté
+
+        return  tmp;
+    }
+
+
+    //retourne tous les ids
+    @Override
+    public List<Long> random_exam_time_int() {
+        return examTimeRepository.getRandomIds();
+    }
     /*@Override
     public Exam_Time random_Exam_Time(Gene gene) {
         Duration duration = durationServiceImp.random_Duration();
@@ -54,36 +78,58 @@ public class Exam_timeServiceImp implements Exam_timeService {
 
     @Override
     public boolean isSameExamTime(Exam_Time examTime, Gene gene) {
-        for (Examen examen : gene.getExams()
-        ) {
-            if(examen.getExamTime().equals(examTime))
-                return true;
+        List<Examen> exams = gene.getExams();
+
+        if (exams == null || exams.isEmpty()) {
+            // Handle the case when exams are null or empty
+            return false;
         }
+
+        for (Examen examen : exams) {
+            if (examen.getExamTime().getId() == examTime.getId()) {
+                return true;
+            }
+        }
+
         return false;
     }
 
     @Override
-    public List<Exam_Time> associateDaysWithExamTimes(List<Days> daysList, List<Duration> durationList) {
-        List<Exam_Time> examTimes = new ArrayList<>();
+    public boolean areExamTimesOverlapping(Exam_Time examTime1, Exam_Time examTime2) {
+        boolean sameDays = examTime1.getDays().equals(examTime2.getDays());
 
-        for (Days day : daysList) {
-            for (Duration duration : durationList) {
-                daysRepository.save(day);
-                durationRepository.save(duration);
+        boolean overlapDurations = durationServiceImp.checkOverlapDurations(examTime1.getDuration(),examTime2.getDuration());
 
-                // Creer nvl exam time pour chaque combinaison
-                Exam_Time examTime = new Exam_Time();
-                examTime.setDays(day);
-                examTime.setDuration(duration);
-
-                // Save l'exam time ds bdd
-                examTimes.add(examTimeRepository.save(examTime));
-            }
-        }
-
-        return examTimes;
+        return sameDays && overlapDurations;
     }
 
+    @Override
+    public void associateDaysWithExamTimes(List<RequestObject> requestObjects) {
+
+        for (RequestObject object:requestObjects
+        ) {
+            Days day=new Days();
+            day.setDate(object.getDay());
+            daysRepository.save(day);
+            Duration duration= new Duration();
+            duration.setDebutExamen(object.getDebut());
+            duration.setFinExamen(object.getFin());
+            durationServiceImp.save(duration);
+            Exam_Time examTime = new Exam_Time();
+            examTime.setDays(day);
+            examTime.setDuration(duration);
+            examTimeRepository.save(examTime);
+        }
+    }
+    @Override
+    public Optional<Exam_Time> findExamTimeByid(Long id)
+    {
+        return examTimeRepository.findById(id);
+    }
+    @Override
+    public void DeleteExamTimeById(Long id) {
+        examTimeRepository.deleteById(id);
+    }
     @Override
     public List<Exam_Time> getExam_Time() {
         return (List<Exam_Time>) examTimeRepository.findAll();

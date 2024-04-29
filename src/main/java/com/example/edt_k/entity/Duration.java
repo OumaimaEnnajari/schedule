@@ -29,8 +29,8 @@ public class Duration {
     @Column(name = "fin_exam")
     private String FinExamen;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "duration", cascade = CascadeType.ALL)
+
+    @OneToMany(mappedBy = "duration", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Exam_Time> exam_times;
 
     @Override

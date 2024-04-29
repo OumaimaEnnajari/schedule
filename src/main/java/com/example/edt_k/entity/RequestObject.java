@@ -9,7 +9,8 @@ import java.util.List;
 @Getter
 @Setter
 public class RequestObject {
-    private List<Days> daysList;
-    private List<Duration> durationList;
+    private String day;
+    private String debut;
+    private String Fin;
 
 }

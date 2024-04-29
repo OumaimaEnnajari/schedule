@@ -16,6 +16,6 @@ public interface FiliereService {
 
     void deleteFiliere(Long id);
     void updateFiliere(Long id, Filiere updatedFiliere);
-
+    void deleteFiliereByNom(String nom);
 
 }

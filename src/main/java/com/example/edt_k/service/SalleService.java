@@ -20,6 +20,7 @@ public interface SalleService {
     Salle saveSalle(Salle salle);
     Salle updateSalle(Long id , Salle newSalle);
     void deleteSalle(Long id);
+    Set<Salle> getSallesByExamenId(Long examenId);
 
 
 }
